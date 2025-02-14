@@ -73,29 +73,42 @@ class LibraryApp:
         self.library.add_member(Member(102, "Charlie Green"))
 
         self.master.title("Library Management System")
-        self.master.geometry("400x300")
+        self.master.geometry("500x400")
+        self.master.configure(bg="#f4f4f4")
 
-        self.label = tk.Label(master, text="Library Management", font=("Arial", 16))
-        self.label.pack()
+        self.label = tk.Label(master, text="📚 Library Management System", font=("Arial", 18, "bold"), bg="#f4f4f4", fg="#333333")
+        self.label.pack(pady=10)
 
-        self.book_entry = tk.Entry(master)
-        self.book_entry.pack()
+        self.book_entry = tk.Entry(master, font=("Arial", 12), width=30, fg="#888888")
+        self.book_entry.pack(pady=5)
         self.book_entry.insert(0, "Enter book title")
-        self.book_entry.bind("<FocusIn>", lambda event: self.book_entry.delete(0, tk.END))
+        self.book_entry.bind("<FocusIn>", lambda event: self.clear_placeholder(self.book_entry, "Enter book title"))
+        self.book_entry.bind("<FocusOut>", lambda event: self.restore_placeholder(self.book_entry, "Enter book title"))
 
-        self.borrow_button = tk.Button(master, text="Borrow Book", command=self.borrow_book)
-        self.borrow_button.pack()
-
-        self.return_button = tk.Button(master, text="Return Book", command=self.return_book)
-        self.return_button.pack()
-
-        self.member_entry = tk.Entry(master)
-        self.member_entry.pack()
+        self.member_entry = tk.Entry(master, font=("Arial", 12), width=30, fg="#888888")
+        self.member_entry.pack(pady=5)
         self.member_entry.insert(0, "Enter member name")
-        self.member_entry.bind("<FocusIn>", lambda event: self.member_entry.delete(0, tk.END))
+        self.member_entry.bind("<FocusIn>", lambda event: self.clear_placeholder(self.member_entry, "Enter member name"))
+        self.member_entry.bind("<FocusOut>", lambda event: self.restore_placeholder(self.member_entry, "Enter member name"))
 
-        self.result_label = tk.Label(master, text="")
-        self.result_label.pack()
+        self.borrow_button = tk.Button(master, text="Borrow Book", command=self.borrow_book, font=("Arial", 12), bg="#4CAF50", fg="white", padx=10, pady=5)
+        self.borrow_button.pack(pady=5)
+
+        self.return_button = tk.Button(master, text="Return Book", command=self.return_book, font=("Arial", 12), bg="#FF9800", fg="white", padx=10, pady=5)
+        self.return_button.pack(pady=5)
+
+        self.result_label = tk.Label(master, text="", font=("Arial", 12), bg="#f4f4f4", fg="#333333")
+        self.result_label.pack(pady=5)
+
+    def clear_placeholder(self, entry, placeholder):
+        if entry.get() == placeholder:
+            entry.delete(0, tk.END)
+            entry.config(fg="#000000")
+
+    def restore_placeholder(self, entry, placeholder):
+        if not entry.get():
+            entry.insert(0, placeholder)
+            entry.config(fg="#888888")
 
     def borrow_book(self):
         book_title = self.book_entry.get()
